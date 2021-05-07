@@ -210,6 +210,13 @@ public class Game implements Serializable {
 
     public void selectAction(Player player, int actionNb) {
         if (!canPlay(player)) return;
+        System.out.println(currentEntity.getClass().getName());
+        /*if(currentEntity.getClass().getName() != "model.entity.Mage"){
+
+        }
+        else{
+            grid.selectLineOfSight(int x, int y, byte direction);
+        }*/
         int minRange=currentEntity.getAction(actionNb).getMinRange();
         int maxRange=currentEntity.getAction(actionNb).getMaxRange();
         grid.selectCellsWithinRange(currentEntity.getX(), currentEntity.getY(), minRange, maxRange);

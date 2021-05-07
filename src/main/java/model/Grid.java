@@ -629,7 +629,7 @@ public class Grid implements Serializable {
         else coordList.clear();
     }
 
-    // renvoie les coordonnées carthésienne de la position de cells[x][y];
+    // renvoie les coordonnées cartésiennes de la position de cells[x][y];
     // utile pour calculer des distances
     private double[] getEffectiveXY(int x, int y) {
         double[] result = new double[2];
@@ -638,7 +638,7 @@ public class Grid implements Serializable {
         return result;
     }
 
-    // calcule la distance entre deux cellules
+    // calcule la distance entière entre deux cellules
     // je sais pas comment ça marche mais je prie petit jésus
     // allègrement copié depuis https://www.redblobgames.com/grids/hexagons/#distances
     private int distance(int x1, int y1, int x2, int y2) {
@@ -653,7 +653,14 @@ public class Grid implements Serializable {
         return (Math.abs(a1-a2)+Math.abs(b1-b2)+Math.abs(c1-c2)) / 2;
     }
 
+    // distance entière
+    // prend en argument des objets de type cube, c'est-à-dire avec trois coordonnées
+    private int distance_cube(Cube a, Cube b){
+        return  (int)(Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z)) / 2;
+    }
+
     // distance réelle entre deux cellules
+    // prend en argument des coordonnées matricielles
     private double distanceR(int x1, int y1, int x2, int y2) {
         double[] c1=getEffectiveXY(x1,y1);
         double[] c2=getEffectiveXY(x2,y2);
@@ -668,4 +675,84 @@ public class Grid implements Serializable {
         return false;
     }
 
+    // convertit des coordonnées matricielles vers un objet "Cube"
+
+    // convertit des coordonnées d'un objet de type "Cube" vers des coordonnées matricielles
+    public int[] cube_matrice(Cube a){
+        int[] result = new int[2];
+        result[0] = (int)a.x + ((int)a.z - ((int)a.z & 1))/2;
+        result[1] = (int)a.z;
+        return result;
+    }
+
+    //convertit des coordonnées du format matrice vers le fomat cube
+    public Cube matrice_cube(int[] a){
+        int x = a[0] - (a[1] - (a[1]&1)) / 2;
+        int z = a[1];
+        int y = -x-z;
+        return new Cube(x, y, z);
+    }
+
+    // renvoie un nombre à t pourcent du chemin entre a et b (t est un nombre entre 0 et 1)
+    // par exemple, si t vaut 0,5 le nombre renvoyé sera au milieu entre a et b (à 50% du chemin)
+    private double interpolation_lineaire(double a, double b, double t){
+        return a + (b - a) * t;
+    }
+
+    private Cube interpolation_cube(Cube a, Cube b, double t){
+        return new Cube(interpolation_lineaire(a.x, b.x, t),
+                        interpolation_lineaire(a.y, b.y, t),
+                        interpolation_lineaire(a.z, b.z, t));
+    }
+
+    // arrondit les coordonnées de a vers des entiers afin qu'on puisse décider quelle cellule inclure sur la ligne
+    private Cube arrondir_cube(Cube a){
+        int rx = (int) a.x;
+        int ry = (int) a.y;
+        int rz = (int) a.z;
+
+        double x_diff = Math.abs(rx - a.x);
+        double y_diff = Math.abs(ry - a.y);
+        double z_diff = Math.abs(rz - a.z);
+
+        if(x_diff > y_diff && x_diff > z_diff){
+            rx = -ry-rz;
+        }
+        else if(y_diff > z_diff){
+            ry = -rx-rz;
+        }
+        else{
+            rz = -rx-ry;
+        }
+
+        return new Cube(rx, ry, rz);
+    }
+
+    // retourne un tableau avec les cellules (en format matriciel) présentes sur la ligne entre a et b
+    private int[][] ligne_cube(int x1, int y1, int x2, int y2){
+        int[] _a = {x1, y1};
+        Cube a = matrice_cube(_a);
+        int[] _b = {x2, y2};
+        Cube b = matrice_cube(_b);
+        int N = distance_cube(a, b);
+        LinkedList<Cube> list = new LinkedList<Cube>();
+        for(int i = 0; i <= N; i++){
+            list.add(arrondir_cube(interpolation_cube(a, b, 1.0 / N * i)));
+        }
+        int[][] result = new int [list.size()][2];
+        for(int i = list.size() - 1; i >= 0; i--){
+            result[list.size() - i - 1][0] = cube_matrice(list.get(i))[0];
+            result[list.size() - i - 1][1] = cube_matrice(list.get(i))[1];
+        }
+        return result;
+    }
+
+    public boolean isVisible(int x1, int y1, int x2, int y2){
+        int[][] ligne = ligne_cube(x1, y1, x2, y2);
+        for(int i = 0; i < ligne.size; i++){
+            if(cells(ligne[i][0], ligne[i][1]).entity != null)
+                return false;
+        }
+        return true;
+    }    
 }

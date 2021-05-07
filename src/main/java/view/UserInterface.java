@@ -54,7 +54,7 @@ public class UserInterface extends Group {
 
     private int nbOfButtons=0;
 
-    private final String[] listOfPossibleEntities = {"soldat", "chevalier"};
+    private final String[] listOfPossibleEntities = {"soldat", "chevalier", "mage"};
 
     private class ActionButton extends GameButton {
         int actionNb;
@@ -157,7 +157,7 @@ public class UserInterface extends Group {
         initOptionMenu();
 
         buyButtons = new LinkedList<>();
-        buyButtons.add(0,new BuyButton("Suppimer", -1));
+        buyButtons.add(0,new BuyButton("Supprimer", -1));
         getChildren().add(buyButtons.get(0));
         for (int i = 1; i < listOfPossibleEntities.length + 1; i++){
             buyButtons.add(i, new BuyButton(listOfPossibleEntities[i - 1], i - 1));
