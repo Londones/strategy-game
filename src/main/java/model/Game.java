@@ -176,7 +176,6 @@ public class Game implements Serializable {
         }
 
     }
-   
     // renvoie le chemin menant de la position de l'entité en cours et les coords x y
     // renvoie null si le chemin n'exsite pas
     protected byte[] makePath(int x, int y) {
@@ -210,13 +209,6 @@ public class Game implements Serializable {
 
     public void selectAction(Player player, int actionNb) {
         if (!canPlay(player)) return;
-        System.out.println(currentEntity.getClass().getName());
-        /*if(currentEntity.getClass().getName() != "model.entity.Mage"){
-
-        }
-        else{
-            grid.selectLineOfSight(int x, int y, byte direction);
-        }*/
         int minRange=currentEntity.getAction(actionNb).getMinRange();
         int maxRange=currentEntity.getAction(actionNb).getMaxRange();
         grid.selectCellsWithinRange(currentEntity.getX(), currentEntity.getY(), minRange, maxRange);

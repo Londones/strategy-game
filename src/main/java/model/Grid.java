@@ -231,7 +231,7 @@ public class Grid implements Serializable {
     }
 
 
-    //Vérifie si un mouvement depuis le cellule x, y dans la direction i est possible
+    //Vérifie si un mouvement depuis la cellule x, y dans la direction i est possible
     private boolean isMovePossible(int x, int y, int orientation) {
         // Vérifie si les coordonnées sont correctes
         if(x < 0 || y < 0 || x > height || y > width){
@@ -268,7 +268,22 @@ public class Grid implements Serializable {
 
         // Vérifie que la différence de hauteur n'est pas trop grande
         int delta = cells[x1][y1].getHeight() - cells[x2][y2].getHeight();
+
+        //On vérifie si il y a une entité à x2, y2 et si la différence de hauteur n'est pas trop grande entre x1, y1 et x2, y2
         return (cells[x2][y2].getEntity() == null && delta <= 1 && delta >=-1 );
+    }
+
+    //Vérifie si une attaque depuis la cellule x1, y1 vers la cellule x2, y2 est possible
+    //Même chose que isMovePossible mais ne vérifie pas si il y a une entité à la cellule de destination
+    private boolean isAttackPossible(int x1, int y1, int x2, int y2) {
+        // Vérifie si les coordonnées sont correctes
+        if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 > height || y1 > width || x2 > height || y2 > width){
+            return false;
+        }
+
+        // Vérifie que la différence de hauteur n'est pas trop grande
+        int delta = cells[x1][y1].getHeight() - cells[x2][y2].getHeight();
+        return (delta <= 1 && delta >=-1 );
     }
 
     // Calcule la distance estimée au point final
@@ -608,12 +623,12 @@ public class Grid implements Serializable {
     // ajoute le cercle de distance dist à coordList
     private void addCellsAtDistance(int x, int y, int dist) {
         int[] coord={x,y+dist};
-        if (isInBounds(coord)) coordList.add(coord);
+        if (isInBounds(coord) && isVisible(x, y, coord[0], coord[1])) coordList.add(coord);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < dist; j++) {
                 coord= getAdjCellCoordinates_2(coord[0],coord[1],(i+3)%6);
                 // TODO : vérifier que la cible est directement visible (pas d'obstacle)
-                if (isInBounds(coord)) {
+                if (isInBounds(coord) && isVisible(x, y, coord[0], coord[1])) {
                     coordList.add(coord);
                 }
             }
@@ -653,12 +668,6 @@ public class Grid implements Serializable {
         return (Math.abs(a1-a2)+Math.abs(b1-b2)+Math.abs(c1-c2)) / 2;
     }
 
-    // distance entière
-    // prend en argument des objets de type cube, c'est-à-dire avec trois coordonnées
-    private int distance_cube(Cube a, Cube b){
-        return  (int)(Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z)) / 2;
-    }
-
     // distance réelle entre deux cellules
     // prend en argument des coordonnées matricielles
     private double distanceR(int x1, int y1, int x2, int y2) {
@@ -675,84 +684,39 @@ public class Grid implements Serializable {
         return false;
     }
 
-    // convertit des coordonnées matricielles vers un objet "Cube"
-
-    // convertit des coordonnées d'un objet de type "Cube" vers des coordonnées matricielles
-    public int[] cube_matrice(Cube a){
-        int[] result = new int[2];
-        result[0] = (int)a.x + ((int)a.z - ((int)a.z & 1))/2;
-        result[1] = (int)a.z;
-        return result;
-    }
-
-    //convertit des coordonnées du format matrice vers le fomat cube
-    public Cube matrice_cube(int[] a){
-        int x = a[0] - (a[1] - (a[1]&1)) / 2;
-        int z = a[1];
-        int y = -x-z;
-        return new Cube(x, y, z);
-    }
-
-    // renvoie un nombre à t pourcent du chemin entre a et b (t est un nombre entre 0 et 1)
-    // par exemple, si t vaut 0,5 le nombre renvoyé sera au milieu entre a et b (à 50% du chemin)
-    private double interpolation_lineaire(double a, double b, double t){
-        return a + (b - a) * t;
-    }
-
-    private Cube interpolation_cube(Cube a, Cube b, double t){
-        return new Cube(interpolation_lineaire(a.x, b.x, t),
-                        interpolation_lineaire(a.y, b.y, t),
-                        interpolation_lineaire(a.z, b.z, t));
-    }
-
-    // arrondit les coordonnées de a vers des entiers afin qu'on puisse décider quelle cellule inclure sur la ligne
-    private Cube arrondir_cube(Cube a){
-        int rx = (int) a.x;
-        int ry = (int) a.y;
-        int rz = (int) a.z;
-
-        double x_diff = Math.abs(rx - a.x);
-        double y_diff = Math.abs(ry - a.y);
-        double z_diff = Math.abs(rz - a.z);
-
-        if(x_diff > y_diff && x_diff > z_diff){
-            rx = -ry-rz;
-        }
-        else if(y_diff > z_diff){
-            ry = -rx-rz;
-        }
-        else{
-            rz = -rx-ry;
-        }
-
-        return new Cube(rx, ry, rz);
-    }
-
     // retourne un tableau avec les cellules (en format matriciel) présentes sur la ligne entre a et b
-    private int[][] ligne_cube(int x1, int y1, int x2, int y2){
+    public static int[][] ligne_matrice(int x1, int y1, int x2, int y2){
         int[] _a = {x1, y1};
-        Cube a = matrice_cube(_a);
+        Cube a = Cube.matrice_cube(_a);
         int[] _b = {x2, y2};
-        Cube b = matrice_cube(_b);
-        int N = distance_cube(a, b);
+        Cube b = Cube.matrice_cube(_b);
+        int N = Cube.distance(a, b);
         LinkedList<Cube> list = new LinkedList<Cube>();
+        //System.out.println(list.size());
         for(int i = 0; i <= N; i++){
-            list.add(arrondir_cube(interpolation_cube(a, b, 1.0 / N * i)));
+            list.add(Cube.interpolation(a, b, 1.0 / N * i).arrondir());
+            // System.out.println(list.get(list.size() - 1));
         }
         int[][] result = new int [list.size()][2];
-        for(int i = list.size() - 1; i >= 0; i--){
-            result[list.size() - i - 1][0] = cube_matrice(list.get(i))[0];
-            result[list.size() - i - 1][1] = cube_matrice(list.get(i))[1];
+        for(int i = 0; i < list.size(); i++){
+            result[i][0] = list.get(i).cube_matrice()[0];
+            result[i][1] = list.get(i).cube_matrice()[1];
         }
         return result;
     }
 
     public boolean isVisible(int x1, int y1, int x2, int y2){
-        int[][] ligne = ligne_cube(x1, y1, x2, y2);
-        for(int i = 0; i < ligne.size; i++){
-            if(cells(ligne[i][0], ligne[i][1]).entity != null)
+        int[][] ligne = ligne_matrice(x1, y1, x2, y2);
+        /*for(int i = 0; i < ligne.length; i++){
+            System.out.println(ligne[i][0] + " " + ligne[i][1]);
+        }
+        System.out.println();*/
+        for(int i = 1; i < ligne.length; i++){
+            if(!isMovePossible(ligne[i-1][0], ligne[i-1][1], ligne[i][0], ligne[i][1]))
                 return false;
+            /*if(cells[ligne[i][0]][ligne[i][1]].entity != null)
+                return false;*/
         }
         return true;
-    }    
+    }
 }

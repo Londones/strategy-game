@@ -8,6 +8,11 @@ import javafx.scene.paint.Color;
 import java.util.LinkedList;
 
 
+//TODO enlever les import en dessous
+import model.Cube;
+import model.Grid;
+
+
 public class MainView extends Application {
 
     private Controller ctrl;
@@ -36,10 +41,10 @@ public class MainView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-    	mainGroup= new Group();
+    	mainGroup = new Group();
     	this.primaryStage=primaryStage;
         //Parent root = FXMLLoader.load(getClass().getResource("MainView.fxml"));
-        mainGroup = new Group();
+        //mainGroup = new Group();
         mainScene=new Scene(mainGroup,width,height);
         ctrl = new Controller(this);
      

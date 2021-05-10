@@ -54,7 +54,7 @@ public class UserInterface extends Group {
 
     private int nbOfButtons=0;
 
-    private final String[] listOfPossibleEntities = {"soldat", "chevalier", "mage"};
+    private final String[] listOfPossibleEntities = {"soldat", "chevalier"};
 
     private class ActionButton extends GameButton {
         int actionNb;
