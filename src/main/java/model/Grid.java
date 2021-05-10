@@ -667,12 +667,6 @@ public class Grid implements Serializable {
         return (Math.abs(a1-a2)+Math.abs(b1-b2)+Math.abs(c1-c2)) / 2;
     }
 
-    // distance entière
-    // prend en argument des objets de type cube, c'est-à-dire avec trois coordonnées
-    private int distance_cube(Cube a, Cube b){
-        return  (int)(Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z)) / 2;
-    }
-
     // distance réelle entre deux cellules
     // prend en argument des coordonnées matricielles
     private double distanceR(int x1, int y1, int x2, int y2) {
