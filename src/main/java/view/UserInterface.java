@@ -54,17 +54,19 @@ public class UserInterface extends Group {
 
     private int nbOfButtons=0;
 
-    private final String[] listOfPossibleEntities = {"soldat", "chevalier"};
+    private final String[] listOfPossibleEntities = {"soldat", "chevalier", "sorcier", "druide", "clerc"};
 
     private class ActionButton extends GameButton {
         int actionNb;
+        String cd;
         GameLabel description;
         boolean isSelected=false;
-        ActionButton(String name, String desc, int actionNb) {
+        ActionButton(String name, String desc, String cd, int actionNb) {
             super(name);
             setFont(new Font(14));
             setTranslateX(START_BUTTON_X + endTurn.getTranslateX() * 2 + actionButtons.size()*200);
             setTranslateY(height-100);
+
             description=new GameLabel(desc);
             description.setFont(new Font(20));
             description.setVisible(false);
@@ -72,10 +74,11 @@ public class UserInterface extends Group {
             description.setTranslateY(height-220);
             description.initstyle();
             this.actionNb=actionNb;
+            this.cd=cd;
             allowMouseListeners();
         }
 
-        public Label getDescription() {
+        public Label getDescription(String cd) {
             return description;
         }
 
@@ -139,6 +142,7 @@ public class UserInterface extends Group {
         this.view=view;
 
         initOptionButton();
+
         endTurn = makeButton("Fin du tour",0);
         start = makeButton("Commencer",0);
         addButton(start);
@@ -203,7 +207,13 @@ public class UserInterface extends Group {
     }
 
     public void updateEntityDetails(EntityView e) {
-        entityDetails.setText(e.getName()+"\npv: "+e.getHp()+"/"+e.getMaxHp());
+        entityDetails.setText(e.getName()+"\npv: "+e.getHp()+"/"+e.getMaxHp()+"\narmure: "+e.getArmor());
+        if(e.getPoisonStatut()>0){
+            entityDetails.setText(entityDetails.getText()+"\npoison: "+e.getPoisonStatut());
+        }
+        if(e.getRootStatut()>0){
+            entityDetails.setText(entityDetails.getText()+"\nparalysée: "+e.getRootStatut());
+        }
         entityDetails.setTranslateX(width/2-entityDetails.getWidth()/2);
     }
 
@@ -246,9 +256,11 @@ public class UserInterface extends Group {
         int nbOfActions=e.getActionNames().length;
         actionButtons= new LinkedList<>();
         for (int i = 0; i < nbOfActions; i++) {
-            ActionButton b = new ActionButton(e.getActionNames()[i], e.getActionDesc()[i],i);
+
+            ActionButton b = new ActionButton(e.getActionNames()[i], e.getActionDesc()[i], e.getActionCd()[i], i);
             actionButtons.add(i,b);
-            actions.getChildren().addAll(b,b.getDescription());
+            actions.getChildren().addAll(b,b.getDescription(e.getActionCd()[i]));
+
         }
     }
 

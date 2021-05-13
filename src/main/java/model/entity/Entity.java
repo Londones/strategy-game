@@ -8,21 +8,27 @@ public abstract class Entity {
     protected int x;  //position x
     protected int y;  //position y
     protected int hp; //points de vie
+    protected int armor;
     protected int maxHp; //points de vie max
     protected int mp; //points de mouvements
     protected int maxMp;//points de mouvements max
+    protected int root;
+    protected int poison;
     protected Action[] actions;
     protected Player player;
 
-    protected int cost; // coût de l'entité à l'achat
+    protected int cost;
 
-    public Entity(Player player, int health, int movement, int cost) {
+    public Entity(Player player, int health, int movement, int armor, int cost) {
         this.player=player;
         maxHp = health;
         hp = health;
         maxMp = movement;
         mp = movement;
-        this.cost=cost;
+        this.armor = armor;
+        this.cost = cost;
+        this.root=0;
+        this.poison=0;
     }
 
     public int getX() {
@@ -37,8 +43,22 @@ public abstract class Entity {
         return hp;
     }
 
+    public int getArmor() { return armor; }
+
+    public int getRoot() {
+        return root;
+    }
+
+    public int getPoison() {
+        return poison;
+    }
+
     public int getMp() {
         return mp;
+    }
+
+    public void setMp(int a) {
+        mp=a;
     }
 
     public Action getAction(int i) {
@@ -53,13 +73,17 @@ public abstract class Entity {
         return player;
     }
 
-    public int getCost() {
-        return cost;
+    public void damage(int dmg) {
+        dmg = dmg-armor;
+        if (dmg>0) {
+            hp=hp-dmg;
+            if (hp<0) hp=0;
+        }
     }
 
-    public void damage(int dmg) {
-        if (dmg>0) {
-            hp-=dmg;
+    public void magicDamage(int mdmg){
+        if (mdmg>0) {
+            hp-=mdmg;
             if (hp<0) hp=0;
         }
     }
@@ -68,6 +92,27 @@ public abstract class Entity {
         if (h>0) {
             hp+=h;
             if (hp>maxHp) hp=maxHp;
+        }
+    }
+
+    public void armorBuff(int a){
+        armor+=a;
+    }
+
+    public void rooting(int a){
+        root=a;
+    }
+
+    public void poisoning(int a){
+        poison=a;
+    }
+
+    public void cleans() {
+        if(poison>0){
+            poison=0;
+        }
+        if(root>0){
+            root=0;
         }
     }
 
@@ -121,8 +166,23 @@ public abstract class Entity {
     }
 
     // renvoie false si l'action échoue
-    public boolean doAction(int i, Cell c) {
-        return actions[i].doAction(c);
+    public boolean doAction(Player p, int i, Cell c) {
+        return actions[i].doAction(p, c);
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public void decreaseAllCooldowns() {
+        for (Action a:actions) {
+            a.reduceCooldown();
+        }
+        if (root>0){
+            root-=1;
+        }
+        if (poison>0){
+            poison-=1;
+        }
+    }
 }

@@ -22,21 +22,30 @@ public class EntityView extends Group {
     private final int maxHp;
     private int hp;
 
+    private int armor;
+
+    private int poisonStatut;
+    private int rootStatut;
+
     private final int maxMp;
     private int mp;
 
     private final String[] actionNames;
     private final String[] actionDesc;
+    private String[] actionCd;
     private final String name;
 
-    EntityView(MainView view, int x, int y, boolean isAlly, String name, int hp, int mp, String[][] actions) {
+    EntityView(MainView view, int x, int y, boolean isAlly, String name, int hp, int mp, int armor, String[][] actions) {
         super();
         this.view=view;
         this.hp=hp;
         maxHp=hp;
+        this.armor=armor;
         this.mp=mp;
         maxMp=mp;
         this.name=name;
+        poisonStatut=0;
+        rootStatut=0;
 
         initSphere();
         initCylinder(isAlly);
@@ -50,9 +59,11 @@ public class EntityView extends Group {
         int length=actions.length;
         actionNames=new String[length];
         actionDesc=new String[length];
+        actionCd=new String[length];
         for (int i = 0; i < length; i++) {
             actionNames[i]=actions[i][0];
             actionDesc[i]=actions[i][1];
+            actionCd[i]=actions[i][2];
         }
     }
 
@@ -81,6 +92,16 @@ public class EntityView extends Group {
         this.hp = hp;
     }
 
+    public void setArmor(int armor) {this. armor = armor; }
+
+    public void setPoisonStatut(int poisonStatut){
+        this.poisonStatut=poisonStatut;
+    }
+
+    public void setRootStatut(int rootStatut){
+        this.rootStatut=rootStatut;
+    }
+
     public int getHp() {
         return hp;
     }
@@ -88,6 +109,12 @@ public class EntityView extends Group {
     public int getMaxHp() {
         return maxHp;
     }
+
+    public int getArmor() { return armor;}
+
+    public int getPoisonStatut() { return poisonStatut;}
+
+    public int getRootStatut() { return rootStatut;}
 
     public int getMp() {
         return mp;
@@ -104,6 +131,8 @@ public class EntityView extends Group {
     public String[] getActionDesc() {
         return actionDesc;
     }
+
+    public String[] getActionCd() { return actionCd; }
 
     public String getName() {
         return name;

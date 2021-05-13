@@ -7,12 +7,6 @@ import javafx.scene.paint.Color;
 
 import java.util.LinkedList;
 
-
-//TODO enlever les import en dessous
-import model.Cube;
-import model.Grid;
-
-
 public class MainView extends Application {
 
     private Controller ctrl;
@@ -47,8 +41,7 @@ public class MainView extends Application {
         //mainGroup = new Group();
         mainScene=new Scene(mainGroup,width,height);
         ctrl = new Controller(this);
-     
-        
+
         welcomeinterface = new WelcomeInterface(width, height, ctrl);
         mainScene=new Scene(welcomeinterface,width,height);
 
@@ -149,8 +142,8 @@ public class MainView extends Application {
 
     }
 
-    public void addEntity(int x, int y, boolean isAlly,String name, int hp, int mp, String[][]actions) {
-        EntityView u = new EntityView(this, x,y,isAlly,name, hp, mp, actions);
+    public void addEntity(int x, int y, boolean isAlly, String name, int hp, int mp, int armor, String[][] actions) {
+        EntityView u = new EntityView(this, x,y,isAlly,name, hp, mp, armor, actions);
         entityViews.add(u);
         gridView.addEntity(u,x,y);
         u.allowActionOnClick(true);
@@ -226,8 +219,11 @@ public class MainView extends Application {
         }
     }
 
-    public void updateHp(int i, int newHp) {
+    public void updateStat(int i, int newHp, int newArmor, int newPoisonStatut, int newRootStatut) {
         entityViews.get(i).setHp(newHp);
+        entityViews.get(i).setArmor(newArmor);
+        entityViews.get(i).setPoisonStatut(newPoisonStatut);
+        entityViews.get(i).setRootStatut(newRootStatut);
         ui.updateEntityDetails(entityViews.get(i));
     }
 
