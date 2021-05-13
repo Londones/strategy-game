@@ -711,12 +711,27 @@ public class Grid implements Serializable {
             System.out.println(ligne[i][0] + " " + ligne[i][1]);
         }
         System.out.println();*/
-        for(int i = 1; i < ligne.length; i++){
-            if(!isMovePossible(ligne[i-1][0], ligne[i-1][1], ligne[i][0], ligne[i][1]))
+        for(int i = 1; i < ligne.length-1; i++){
+            if(!isDirectlyVisible(ligne[i-1][0], ligne[i-1][1], ligne[i][0], ligne[i][1]))
                 return false;
             /*if(cells[ligne[i][0]][ligne[i][1]].entity != null)
                 return false;*/
         }
         return true;
     }
+
+    //Vérifie si la cellule x2 y2 adjacente à x1 y1 est directement visible
+    private boolean isDirectlyVisible(int x1, int y1, int x2, int y2) {
+        // Vérifie si les coordonnées sont correctes
+        if(x1 < 0 || y1 < 0 || x2 < 0 || y2 < 0 || x1 > height || y1 > width || x2 > height || y2 > width){
+            return false;
+        }
+
+        // Vérifie que la différence de hauteur n'est pas trop grande
+        int delta = cells[x1][y1].getHeight() - cells[x2][y2].getHeight();
+
+        //On vérifie si la cible n'est pas plus haute que le départ
+        return (cells[x2][y2].getEntity() == null && delta >= -1);
+    }
+
 }
