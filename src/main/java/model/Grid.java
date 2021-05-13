@@ -627,7 +627,6 @@ public class Grid implements Serializable {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < dist; j++) {
                 coord= getAdjCellCoordinates_2(coord[0],coord[1],(i+3)%6);
-                // TODO : vérifier que la cible est directement visible (pas d'obstacle)
                 if (isInBounds(coord) && isVisible(x, y, coord[0], coord[1])) {
                     coordList.add(coord);
                 }
