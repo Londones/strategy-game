@@ -15,7 +15,7 @@ public class Level  implements Serializable {
 	 */
 	private static final long serialVersionUID = -1092342944633849329L;
 	private Grid grid;
-	
+
 	/*
 	 * Le Constructeur
 	 */
@@ -34,10 +34,10 @@ public class Level  implements Serializable {
 	}
 	
 	
-	public void createLevel() {
-		//pour sérialiser la grille de départ dans un fichier level1 dans le dossier Levels
+	public void createLevel(String filename) {
+		//pour sérialiser la grille de départ dans un fichier "filename" dans le dossier Levels
         try {
-			FileOutputStream fos = new FileOutputStream("src/main/Levels/level1");
+			FileOutputStream fos = new FileOutputStream(filename);
 		    ObjectOutputStream os = new ObjectOutputStream(fos);
 			os.writeObject(this.GetGrid());
 			os.close();
@@ -50,14 +50,15 @@ public class Level  implements Serializable {
 	 * @return la grille (la tableau de cellules qu'on a sérialisé
 	 */
 	
-	public Grid showLevel() {
+	public Grid showLevel(String str) {
 		//desérialiser le niveau 
 	    this.SetGrid(null);
 		try {
-			String str ="src/main/Levels/level1";
+			// String str ="src/main/Levels/level1";
 			FileInputStream fis = new FileInputStream(str);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			this.SetGrid((Grid )ois.readObject()); 
+			this.SetGrid((Grid)ois.readObject()); 
+			ois.close();
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());

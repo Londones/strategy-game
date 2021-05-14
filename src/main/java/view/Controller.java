@@ -21,7 +21,7 @@ public class Controller {
     }
 
     public void loadLevel() {
-        player.loadLevel();
+        player.loadLevel("src/main/Levels/level4");
     }
 
     public void loadLevel(String option) {
