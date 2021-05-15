@@ -2,6 +2,7 @@ package view;
 
 import custom.GameMenu;
 import custom.MainMenu;
+import custom.LevelMenu;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,7 @@ public class WelcomeInterface extends Pane {
 	private Controller ctrl;
     private GameButton play;
     private MainMenu menu;
+    private LevelMenu levelMenu;
 
     int width;
     int height;
@@ -39,6 +41,8 @@ public class WelcomeInterface extends Pane {
         play.setTranslateX(width/2 - 85);
 
         menu = new MainMenu(width, height);
+
+        levelMenu = new LevelMenu(width, height);
 
         getChildren().add(menu);
 
@@ -97,17 +101,24 @@ public class WelcomeInterface extends Pane {
             ctrl.getMainView().allowGridViewControls(true);*/
 
             menu.animation();
-
             option.setVisible(false);
 
         });
 
         menu.getMulti().setOnMouseClicked(e -> {
-            launchGame("localMultiplayer");
+            levelMenu.setGameMode("localMultiplayer");
+            getChildren().clear();
+            getChildren().add(levelMenu);
+            levelMenu.animation();
+            //launchGame("localMultiplayer");
         });
 
         menu.getBot().setOnMouseClicked(e -> {
-            launchGame("vsBot");
+            levelMenu.setGameMode("vsBot");
+            getChildren().clear();
+            getChildren().add(levelMenu);
+            levelMenu.animation();
+            //launchGame("vsBot");
         });
 
         option.setOnMouseClicked(e -> {
@@ -121,16 +132,32 @@ public class WelcomeInterface extends Pane {
         menu.getQuit().setOnAction(e -> {
             ctrl.getMainView().getPrimaryStage().close();
         });
+
+        levelMenu.getMap1().setOnMouseClicked(e -> {
+            launchGame(levelMenu.getGameMode(), "src/main/Levels/level1");
+        });
+
+        levelMenu.getMap2().setOnMouseClicked(e -> {
+            launchGame(levelMenu.getGameMode(), "src/main/Levels/level2");
+        });
+
+        levelMenu.getMap3().setOnMouseClicked(e -> {
+            launchGame(levelMenu.getGameMode(), "src/main/Levels/level3");
+        });
+
+        levelMenu.getMap4().setOnMouseClicked(e -> {
+            launchGame(levelMenu.getGameMode(), "src/main/Levels/level4");
+        });
     }
 
-    private void launchGame(String option) {
+    private void launchGame(String option, String level_filename) {
         ctrl.getMainView().setChosenAction(-2);
         ctrl.view.setMainGroup( ( Group)new BuyEntityInterface(width, height, ctrl));
         Scene buyScene= new Scene(ctrl.getMainGroup(),width,height);
         ctrl.getStage().setScene(buyScene);
 
         ctrl.initializePlayer();
-        ctrl.loadLevel(option);
+        ctrl.loadLevel(option, level_filename);
         ctrl.mkGameGrid();
         ctrl.getMainView().allowGridViewControls(true);
         menu.animation();

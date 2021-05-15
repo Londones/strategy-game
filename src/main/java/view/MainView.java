@@ -194,7 +194,7 @@ public class MainView extends Application {
         ui.showEntityDetails(false);
     }
 
-
+    //fonction main du programme
     public static void main(String[] args) throws Exception {
         launch(args);
     }

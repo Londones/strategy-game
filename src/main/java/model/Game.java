@@ -23,7 +23,7 @@ public class Game implements Serializable {
 
     private boolean lm =false; // lm = local multiplayer : si lm==true, le joueur 1 contrôle les 2 joueurs
 
-
+    // constructeur
     public Game(Grid grid, Player ... playerList) {
         playableEntities = new LinkedList<>();
         this.grid=grid;
@@ -34,6 +34,7 @@ public class Game implements Serializable {
         }
     }
 
+    // nouveau constructeur prenant en argument le mode du jeu
     public Game(String option, Grid grid, Player ... playerList) {
         this(grid, playerList);
         if (option.equals("localMultiplayer")) {
@@ -49,6 +50,7 @@ public class Game implements Serializable {
         }
     }
 
+    // ajout d'un joueur
     public void addPlayer(Player p) {
         if (!players.contains(p)) players.add(p);
         p.setGame(this);
@@ -58,6 +60,7 @@ public class Game implements Serializable {
         return grid;
     }
 
+    // vérifie si c'est un jeu de type multijoueur local
     protected boolean isLocalMultiplayer() {
         return lm;
     }
@@ -129,7 +132,7 @@ public class Game implements Serializable {
     }
 
    
-    //un joueur essaie de poser une entité
+    // un joueur essaie de poser une entité
     public void tryToAddEntityToGame(Player player, int x, int y, int entity_type) {
         if(!canAddEntity(player) || gameState!=0) return;
         Entity e = null;
@@ -161,6 +164,7 @@ public class Game implements Serializable {
         }
     }
 
+    // enlève, si c'est possible, l'entité sur la case x, y de player
     public void tryToDeleteEntity(Player player, int x, int y) {
         Entity e = grid.getCell(x,y).getEntity();
         if (gameState!=0 || e==null || e.getPlayer()!=player) return;
@@ -178,6 +182,7 @@ public class Game implements Serializable {
         return false;
     }
 
+    // vérifie que tout les joueurs sont prêts à jouer
     private boolean allPlayersAreReady() {
         for (Player p:players) {
             if (!p.isReady()) return false;
@@ -225,17 +230,21 @@ public class Game implements Serializable {
         return grid.getPath(currentEntity.getX(), currentEntity.getY(), x, y, currentEntity.getMp());
     }
 
-
+    // effectue, si elle est valide, l'action "action" du joueur "player" sur les cases x, y avec l'entité "currentEntity" associée au joueur
     public void doAction(Player player, int action, int x, int y) {
         if (!canPlay(player)) return;
         if (lm) player=currentPlayer; // necessaire si multi local
         Cell c = grid.getCell(x,y);
+        //on vérifie la validité des coordonnées x, y et si l'action "action" sur la case x, y a été effectuée avec succès avec l'entité "currentEntity"
+        //la variable "action" effectue des choses différentes en fonction de l'entité courante ("currentEntity")
         if (grid.isInCoordList(x,y) && currentEntity.doAction(player, action, c)) {
-            // pour l'instant on update les points de vie de toutes les entités, ce n'est pas idéal
+            //mise à jour des points de vie de l'entité dans la vue
+            //pour l'instant on update les points de vie de toutes les entités, ce n'est pas idéal
             for (int i = 0; i < playableEntities.size(); i++) {
                 for (Player p : players) {
                     p.updateStatView(i, playableEntities.get(i).getHp(), playableEntities.get(i).getArmor(), playableEntities.get(i).getPoison(), playableEntities.get(i).getRoot());
                 }
+                // on enlève l'entité numéro "i" si elle n'a plus de points de vie
                 removeIfDead(i);
             }
         }
@@ -250,6 +259,7 @@ public class Game implements Serializable {
         }
     }
 
+    // sélection d'une action de type "actionNb" venant du joueur "player"
     public void selectAction(Player player, int actionNb) {
         if (!canPlay(player)) return;
         int minRange=currentEntity.getAction(actionNb).getMinRange();
@@ -258,6 +268,7 @@ public class Game implements Serializable {
         player.updateActionRangeView(grid.getCoordList());
     }
 
+    // déselection de l'action du joueur "player"
     public void cancelAction(Player player) {
         if (!canPlay(player)) return;
         grid.clearCoordList();
@@ -270,12 +281,14 @@ public class Game implements Serializable {
         }
     }
 
+    // enlève l'entité "e" de la grille
     private void removeEntity(Entity e) {
         int i = playableEntities.indexOf(e);
         removeEntity(i);
     }
 
 
+    // enlève l'entité numéro "i" de la grille
     private void removeEntity(int i) {
         grid.getCell(playableEntities.get(i).getX(),playableEntities.get(i).getY()).setEntity(null);
         playableEntities.remove(i);

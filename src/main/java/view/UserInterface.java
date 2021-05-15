@@ -16,9 +16,9 @@ import java.util.Optional;
 
 
 /**
- * L'interface utilisateur est tout les éléments
+ * L'interface utilisateur et tout les éléments
  * (interactifs ou non) en 2D lors du jeu, comme les
- * boutons clickables
+ * boutons cliquables
  */
 public class UserInterface extends Group {
     private MainView view;
@@ -54,8 +54,10 @@ public class UserInterface extends Group {
 
     private int nbOfButtons=0;
 
+    //liste des entités qu'il est possible d'acheter pendant le début du jeu
     private final String[] listOfPossibleEntities = {"Soldier", "Knight", "Wizard", "Druid", "Cleric"};
 
+    //bouton effectuant une action (différents types d'attaques) associée à une entité 
     private class ActionButton extends GameSpell {
         int actionNb;
         String cd;
@@ -77,6 +79,7 @@ public class UserInterface extends Group {
             allowMouseListeners();
         }
 
+        //renvoie la description de l'entité
         public Label getDescription(String cd) {
             return description;
         }
@@ -87,6 +90,7 @@ public class UserInterface extends Group {
             });
         }
 
+        //sélectionne ou déselectionne l'action
         private void toggleSelected() {
             if (isSelected) {
                 view.resetAction();
@@ -102,6 +106,7 @@ public class UserInterface extends Group {
 
     }
 
+    //bouton permettant d'acheter une entité affiché pendant le début du jeu
     private class BuyButton extends GameIcon {
         private final int entityNb;
 
@@ -115,6 +120,7 @@ public class UserInterface extends Group {
         }
     }
 
+    //constructeur de la classe UserInterface qui initialise les éléments 2D
     UserInterface(int width, int height, Controller controller, MainView view) {
         super();
         this.width=width;
@@ -183,6 +189,7 @@ public class UserInterface extends Group {
 
     }
 
+    //affiche la fortune du joueur
     public void moneyLabelInit(){
         money = new GameLabel("");
         money.initstyle2();
@@ -249,6 +256,7 @@ public class UserInterface extends Group {
         return b;
     }
 
+    //affiche le bouton "options"
     private void initOptionButton(){
         option = new GameButton("Options");
         getChildren().add(option);
@@ -257,6 +265,7 @@ public class UserInterface extends Group {
         option.initStyle();
     }
 
+    //affiche le menu "options"
     private void initOptionMenu(){
         getChildren().add(optionMenu);
         optionMenu.fadeOutScene();
@@ -272,6 +281,7 @@ public class UserInterface extends Group {
         });
     }
 
+    //met à jour les boutons en fonction de l'entité
     public void updateActionButtons(EntityView e) {
         actions.getChildren().clear();
         actions.getChildren().add(endTurn);
@@ -286,10 +296,12 @@ public class UserInterface extends Group {
         }
     }
 
+    //affiche la liste des actions
     public void showActionButtons(boolean bool) {
         actions.setVisible(bool);
     }
 
+    //déselectionne toutes les actions
     public void resetActionButtons() {
         if (actionButtons!=null) {
             for (ActionButton ab : actionButtons) {

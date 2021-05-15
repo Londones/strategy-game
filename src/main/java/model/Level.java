@@ -50,12 +50,12 @@ public class Level  implements Serializable {
 	 * @return la grille (la tableau de cellules qu'on a sérialisé
 	 */
 	
-	public Grid showLevel(String str) {
+	public Grid showLevel(String level_filename) {
 		//desérialiser le niveau 
 	    this.SetGrid(null);
 		try {
 			// String str ="src/main/Levels/level1";
-			FileInputStream fis = new FileInputStream(str);
+			FileInputStream fis = new FileInputStream(level_filename);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			this.SetGrid((Grid)ois.readObject()); 
 			ois.close();

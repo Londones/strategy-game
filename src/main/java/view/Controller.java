@@ -21,11 +21,11 @@ public class Controller {
     }
 
     public void loadLevel() {
-        player.loadLevel("src/main/Levels/level4");
+        player.loadLevel();
     }
 
-    public void loadLevel(String option) {
-        player.loadLevel(option);
+    public void loadLevel(String option, String level_filename) {
+        player.loadLevel(option, level_filename);
     }
 
     public void mkGameGrid() {
@@ -55,14 +55,17 @@ public class Controller {
         player.doAction(actionNb, x, y);
     }
 
+    //l'action est sélectionnée depuis la barre d'actions
     public void selectAction(int actionNb) {
         player.selectAction(actionNb);
     }
 
+    //l'action est déselectionnée
     public void cancelAction() {
         player.cancelAction();
     }
 
+    //ajout d'une entité de type "entity_type" au jeu 
     public void addEntityToGame(int x, int y, int entity_type) {
         player.addEntityToGame(x, y, entity_type);
     }
