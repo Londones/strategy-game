@@ -69,7 +69,7 @@ public class Player {
     // ---------------------------------
 
     //fonction qui charge le toujours le niveau 1 du jeu
-    public void loadLevel() { //todo : permettre de charger une grille sérialisée
+    public void loadLevel() {
         Level level = new Level();
         new Game(level.showLevel("src/main/Levels/level1"), this);
 
@@ -152,9 +152,9 @@ public class Player {
         grid.getCell(5,3).setHeight((byte)1);
 
         grid.getCell(1,8).setHeight((byte)1);
-        grid.getCell(2,8).setHeight((byte)1);
+        grid.getCell(2,9).setHeight((byte)1);
         grid.getCell(3,8).setHeight((byte)2);
-        grid.getCell(4,8).setHeight((byte)1);
+        grid.getCell(4,9).setHeight((byte)1);
         grid.getCell(5,8).setHeight((byte)1);
 
         grid.getCell(1,9).setHeight((byte)1);
