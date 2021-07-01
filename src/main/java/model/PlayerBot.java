@@ -42,4 +42,7 @@ public class PlayerBot extends Player {
 
     @Override
     protected void resetAction() {}
+
+    @Override
+    public void updateHPofTarget(int i) {}
 }

@@ -232,4 +232,8 @@ public class Player {
     public void updateAllEntityViews() {
         game.updateAllEntityViews(this);
     }
+
+    public void updateHPofTarget(int i) {
+        view.updateStatsOfTarget(i);
+    }
 }

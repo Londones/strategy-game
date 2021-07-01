@@ -229,6 +229,10 @@ public class MainView extends Application {
         entityViews.get(i).setArmor(newArmor);
         entityViews.get(i).setPoisonStatut(newPoisonStatut);
         entityViews.get(i).setRootStatut(newRootStatut);
+        //ui.updateEntityDetails(entityViews.get(i));
+    }
+
+    public void updateStatsOfTarget(int i) {
         ui.updateEntityDetails(entityViews.get(i));
     }
 

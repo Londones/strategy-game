@@ -266,6 +266,11 @@ public class Game implements Serializable {
                 removeIfDead(i);
             }
         }
+        Entity e = c.getEntity();
+        if (e!=null) {
+            // il faut surtout pas faire ça comme ça mais là j'ai la flemme
+            player.updateHPofTarget(playableEntities.indexOf(e));
+        }
         grid.clearCoordList();
         player.resetAction();
         endGameIfOver();

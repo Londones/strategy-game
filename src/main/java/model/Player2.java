@@ -37,4 +37,9 @@ public class Player2 extends Player {
         money += amount;
         player1.changeAmoutOfMoneyInViewOnly(money);
     }
+
+    @Override
+    public void updateHPofTarget(int i) {
+        player1.updateHPofTarget(i);
+    }
 }
