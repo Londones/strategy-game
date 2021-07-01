@@ -14,7 +14,7 @@ public class Wizard extends Entity {
         super.x=x;
         super.y=y;
         super.actions = new Action[2];
-        actions[0]=new Attack("Boule de feu", "magic",1,6,8,0,1);
+        actions[0]=new Attack("Boule de feu", "magic",2,6,8,0,2);
         actions[1]=new ArmorBuff("Protection", "buff",1,4,2,0,3);
     }
 

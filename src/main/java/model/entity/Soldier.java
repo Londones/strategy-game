@@ -13,7 +13,7 @@ public class Soldier extends Entity {
         super.y=y;
         super.actions = new Action[2];
         actions[0]=new Attack("Frappe courte", "physique",1,1,4,0,1);
-        actions[1]=new Attack("Frappe longue", "physique",2,6,6,0,2);
+        actions[1]=new Attack("Frappe longue", "physique",2,6,6,0,1);
 
     }
 
