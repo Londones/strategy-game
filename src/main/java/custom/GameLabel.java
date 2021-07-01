@@ -18,13 +18,13 @@ public class GameLabel extends Label {
 
     private final String BACKGROUND = "-fx-background-image: url('boxes/bar_ready.png'); " +
             "-fx-background-position: center; -fx-background-size: 300 135; -fx-font-family: 'Cinzel Decorative';" +
-            "src: url('src/main/resources/style/CinzelDecorative-Bold.ttf'); -fx-font-size: 12;" +
+            "src: url('style/CinzelDecorative-Bold.ttf'); -fx-font-size: 12;" +
             "-fx-line-spacing: 0.7; -fx-padding: 0 0 5 0;";
     private final String BACKGROUND2 = "-fx-background-image: url('boxes/name_bar2.png'); " +
             "-fx-background-position: center; -fx-background-size: 180 90; -fx-font-family: 'Cinzel Decorative';" +
-            "src: url('src/main/resources/style/CinzelDecorative-Bold.ttf'); -fx-font-size: 15;" +
+            "src: url('style/CinzelDecorative-Bold.ttf'); -fx-font-size: 15;" +
             "-fx-line-spacing: 0.7; -fx-padding: 0 0 5 0;";
-    private final String FONT = "src/main/resources/style/CinzelDecorative-Bold.ttf";
+    private final String FONT = "style/CinzelDecorative-Bold.ttf";
 
     public GameLabel(String s, int fontsize){
         super(s);
@@ -57,13 +57,9 @@ public class GameLabel extends Label {
     }
 
     private void initLabelFont(int fontSize){
-        try {
-            setFont(Font.loadFont(new FileInputStream(FONT), fontSize));
-            setTextFill(Paint.valueOf("white"));
-            setLineSpacing(0.7);
-        } catch (FileNotFoundException e){
-            setFont(Font.font("Verdana", fontSize));
-        }
+        setTextFill(Paint.valueOf("white"));
+        setLineSpacing(0.7);
+        setFont(Font.loadFont(getClass().getResourceAsStream("/"+FONT), fontSize));
     }
 
     private DropShadow labelEffect(){

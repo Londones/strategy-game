@@ -21,11 +21,11 @@ public class GameButton extends Button {
     private final String BUTTON_FREE= "-fx-background-color: transparent;" +
             "-fx-background-image: url('buttons/button_ready_on.png'); -fx-background-size: 170 65;" +
             "-fx-background-position: center; -fx-font-family: 'Cinzel Decorative'; -fx-line-spacing: -7;" +
-            "src: url('src/main/resources/style/CinzelDecorative-Bold.ttf'); -fx-font-size: 16; -fx-padding: 0 0 6 0;";
+            "src: url('style/CinzelDecorative-Bold.ttf'); -fx-font-size: 16; -fx-padding: 0 0 6 0;";
     private final String BUTTON_PRESSED = "-fx-background-color: transparent;" +
             "-fx-background-image: url('buttons/button_ready_off.png'); -fx-background-size: 170 65;" +
             "-fx-background-position: center; -fx-font-family: 'Cinzel Decorative'; -fx-line-spacing: -7;" +
-            "src: url('src/main/resources/style/CinzelDecorative-Bold.ttf'); -fx-font-size: 15; ; -fx-padding: 0 0 6 0;";
+            "src: url('style/CinzelDecorative-Bold.ttf'); -fx-font-size: 15; ; -fx-padding: 0 0 6 0;";
 
     public GameButton(String s){
         super(s);
@@ -66,14 +66,9 @@ public class GameButton extends Button {
     }
 
    private void initButtonFont(){
-        try {
-            String FONT = "src/main/resources/style/CinzelDecorative-Bold.ttf";
-            setTextFill(Paint.valueOf("#140101"));
-            Font f = Font.loadFont(new FileInputStream(FONT), 15);
-       } catch (FileNotFoundException e){
-            System.out.println(e);
-        }
-    }
+       setTextFill(Paint.valueOf("#140101"));
+       Font.loadFont(getClass().getResourceAsStream("/style/CinzelDecorative-Bold.ttf"), 15);
+   }
 
     private DropShadow labelEffect(){
         DropShadow ds = new DropShadow();

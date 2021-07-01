@@ -141,19 +141,19 @@ public class WelcomeInterface extends Pane {
         });
 
         levelMenu.getMap1().setOnMouseClicked(e -> {
-            launchGame(levelMenu.getGameMode(), "src/main/Levels/level1");
+            launchGame(levelMenu.getGameMode(), "level1");
         });
 
         levelMenu.getMap2().setOnMouseClicked(e -> {
-            launchGame(levelMenu.getGameMode(), "src/main/Levels/level2");
+            launchGame(levelMenu.getGameMode(), "level2");
         });
 
         levelMenu.getMap3().setOnMouseClicked(e -> {
-            launchGame(levelMenu.getGameMode(), "src/main/Levels/level3");
+            launchGame(levelMenu.getGameMode(), "level3");
         });
 
         levelMenu.getMap4().setOnMouseClicked(e -> {
-            launchGame(levelMenu.getGameMode(), "src/main/Levels/level4");
+            launchGame(levelMenu.getGameMode(), "level4");
         });
 
         levelMenu.getBackButton().setOnMouseClicked(e -> {

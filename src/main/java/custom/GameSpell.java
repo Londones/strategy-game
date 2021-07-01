@@ -22,7 +22,7 @@ public class GameSpell extends Button {
 
     private final String LABEL_BG = "boxes/barmid_ready.png";
     private final String LABEL_STYLE = "-fx-font-family: 'Cinzel Decorative';" +
-            "src: url('src/main/resources/style/CinzelDecorative-Bold.ttf'); -fx-font-size: 10;";
+            "src: url('style/CinzelDecorative-Bold.ttf'); -fx-font-size: 10;";
 
     private Label label;
 

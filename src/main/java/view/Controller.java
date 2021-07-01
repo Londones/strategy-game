@@ -20,9 +20,9 @@ public class Controller {
         player=new Player(view);
     }
 
-    public void loadLevel() {
-        player.loadLevel();
-    }
+    //public void loadLevel() {
+    //    player.loadLevel();
+    //}
 
     public void loadLevel(String option, String level_filename) {
         player.loadLevel(option, level_filename);
