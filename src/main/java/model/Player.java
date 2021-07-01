@@ -236,4 +236,8 @@ public class Player {
     public void updateHPofTarget(int i) {
         view.updateStatsOfTarget(i);
     }
+
+    public void permuteEntities(int[] perm) {
+        view.permuteEntities(perm);
+    }
 }

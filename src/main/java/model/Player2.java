@@ -42,4 +42,7 @@ public class Player2 extends Player {
     public void updateHPofTarget(int i) {
         player1.updateHPofTarget(i);
     }
+
+    @Override
+    public void permuteEntities(int[] perm) {}
 }

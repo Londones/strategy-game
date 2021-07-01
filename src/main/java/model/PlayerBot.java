@@ -45,4 +45,7 @@ public class PlayerBot extends Player {
 
     @Override
     public void updateHPofTarget(int i) {}
+
+    @Override
+    public void permuteEntities(int[] perm) {}
 }

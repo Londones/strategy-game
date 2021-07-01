@@ -73,13 +73,55 @@ public class Game implements Serializable {
         }
     }
 
+    // code tout pourri et pas performant mais osef
+    private int[] scrambleEntities() {
+
+        int nb = players.size();
+        Entity[][] entities = new Entity[nb][playableEntities.size()]; // overkill mais ça marche
+        int[] shit = new int[nb];
+
+        for (Entity e:playableEntities) {
+            int i = players.indexOf(e.getPlayer());
+            entities[i][shit[i]]=e;
+            shit[i]++;
+        }
+
+        LinkedList<Entity> newEntities = new LinkedList<>();
+
+        for (int i = 0; i < nb; i++) {
+            shit[i]=0;
+        }
+        int a = 0;
+        while (newEntities.size()<playableEntities.size()) {
+            if (entities[a][shit[a]]!=null) {
+                newEntities.add(entities[a][shit[a]]);
+                shit[a]++;
+            }
+            a=(a+1)%nb;
+        }
+
+        int[] perm = new int[playableEntities.size()];
+
+        for (int i = 0; i < perm.length; i++) {
+            perm[i]=newEntities.indexOf(playableEntities.get(i));
+        }
+
+        playableEntities.clear();
+        playableEntities.addAll(newEntities);
+
+        return perm;
+    }
+
+
     // premier tour de jeu
     // current player et current entity sont correctement initialisée
     private void firstRound() {
+        int[] perm = scrambleEntities();
         entInd=0;
         currentEntity=playableEntities.get(entInd);
         currentPlayer=currentEntity.getPlayer();
         for (Player p:players) {
+            p.permuteEntities(perm);
             p.focusFirstEntity(entInd, p==currentPlayer || lm);
         }
         endGameIfOver(); // ne devrait jamais se faire

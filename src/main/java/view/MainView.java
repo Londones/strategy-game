@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.scene.*;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class MainView extends Application {
@@ -299,6 +300,15 @@ public class MainView extends Application {
         preGameAction = -1;
         path=null;
         welcomeinterface.resetAll();
+    }
+
+    public void permuteEntities(int[] perm) {
+        EntityView[] newEntityViews = new EntityView[entityViews.size()];
+        for (int i = 0; i < perm.length; i++) {
+            newEntityViews[perm[i]]=entityViews.get(i);
+        }
+        entityViews.clear();
+        entityViews.addAll(Arrays.asList(newEntityViews));
     }
 }
 
